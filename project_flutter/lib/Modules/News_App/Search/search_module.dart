@@ -5,8 +5,8 @@ import 'package:project_flutter/Component/const_component.dart';
 import 'package:project_flutter/Layout/News_App/Cubit/cubit.dart';
 import 'package:project_flutter/Layout/News_App/Cubit/states.dart';
 
-class SearchScreen extends StatelessWidget {
-  SearchScreen({Key? key}) : super(key: key);
+class SearchNewsAppScreen extends StatelessWidget {
+  SearchNewsAppScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

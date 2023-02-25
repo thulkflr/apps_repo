@@ -45,7 +45,7 @@ class NewsCubit extends Cubit<NewsStates> {
       'from': '2023-01-16',
       'sortBy': 'publishedAt',
       'apiKey': 'e056ffa0ad954ad6bb1cb6d21f31647e',
-    }).then((value) {
+    }, token: '').then((value) {
       //print (value.data.toString());
       teslas = value.data['articles'];
       print(teslas[5]['title']);
@@ -67,7 +67,7 @@ class NewsCubit extends Cubit<NewsStates> {
         'from': '2023-01-16',
         'sortBy': 'publishedAt',
         'apiKey': 'e056ffa0ad954ad6bb1cb6d21f31647e',
-      }).then((value) {
+      }, token: '').then((value) {
         //print (value.data.toString());
         fords = value.data['articles'];
         // print (teslas[5]['title']);
@@ -92,7 +92,7 @@ class NewsCubit extends Cubit<NewsStates> {
         'from': '2023-01-16',
         'sortBy': 'publishedAt',
         'apiKey': 'e056ffa0ad954ad6bb1cb6d21f31647e',
-      }).then((value) {
+      }, token: '').then((value) {
         //print (value.data.toString());
         jauars = value.data['articles'];
         //print (teslas[5]['title']);
@@ -116,7 +116,7 @@ class NewsCubit extends Cubit<NewsStates> {
     DioHelper.getData(url: 'v2/everything', query: {
       'q': value,
       'apiKey': 'e056ffa0ad954ad6bb1cb6d21f31647e',
-    }).then((value) {
+    }, token: '').then((value) {
       //print (value.data.toString());
       searches = value.data['articles'];
       //print (teslas[5]['title']);

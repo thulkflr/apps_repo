@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +7,6 @@ import 'package:project_flutter/Cubit/cubit.dart';
 import 'package:project_flutter/Layout/News_App/Cubit/cubit.dart';
 import 'package:project_flutter/Layout/News_App/Cubit/states.dart';
 
-import 'package:project_flutter/Network/Remote/dio_helper.dart';
 
 import '../../Modules/News_App/Search/search_module.dart';
 
@@ -23,7 +22,7 @@ class NewsLayout extends StatelessWidget {
             title: Text('News Paper'),
             actions: [
               IconButton(onPressed: () {
-                navigateTo(context, SearchScreen());
+                navigateTo(context, SearchNewsAppScreen());
               }, icon: Icon(Icons.search,)),
               IconButton(onPressed: () {
                 CounterCubit.get(context).changeAppTheme();
