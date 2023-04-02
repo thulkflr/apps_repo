@@ -3,12 +3,15 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_flutter/Component/const_component.dart';
+import 'package:project_flutter/Layout/Shop_App/Product_Details/product_details_screen.dart';
 import 'package:project_flutter/Layout/Shop_App/Shop_Layout/Cubit/cubit.dart';
 import 'package:project_flutter/Layout/Shop_App/Shop_Layout/Cubit/states.dart';
+import 'package:project_flutter/Models/Shop_App/favorites_model.dart';
 import 'package:project_flutter/Models/Shop_App/home_model.dart';
 import 'package:project_flutter/Styles/colors.dart';
 
 import '../../../Models/Shop_App/categories_model.dart';
+import '../Product_Details/Cubit/cubit.dart';
 
 class ProductScreen extends StatelessWidget {
   const ProductScreen({Key? key}) : super(key: key);
@@ -18,34 +21,55 @@ class ProductScreen extends StatelessWidget {
     return BlocConsumer<ShopLayoutCubit, ShopStates>(
       listener: (context, state) {
         if (state is SuccessChangeFavoritsDataState) {
-          if (!state.model.status) {showToast(msg: state.model.message , states: ToastStates.ERORR,context: context);}
+          if (!state.model.status) {
+            showToast(
+                msg: state.model.message,
+                states: ToastStates.ERORR,
+                context: context);
+          }
         }
       },
       builder: (context, state) {
+        if(ShopLayoutCubit.get(context).categoriesModel!.data?.data!.length == 0)
+        {return Center(
+          child: Column(crossAxisAlignment: CrossAxisAlignment.center,mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.waving_hand,size: 70,color: Colors.grey.shade300),
+              Text('Home not Empty',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.grey.shade300),)
+            ],
+          ),
+        );}
         return ConditionalBuilder(
-          condition: ShopLayoutCubit.get(context).homeModel != null &&
-              ShopLayoutCubit.get(context).categoriesModel != null,
           builder: (context) {
             return homeProductsBuilder(ShopLayoutCubit.get(context).homeModel,
-                ShopLayoutCubit.get(context).categoriesModel, context);
+                ShopLayoutCubit.get(context).categoriesModel,  context);
           },
-          fallback: (context) => Center(child: CircularProgressIndicator()),
+          fallback: (context) {
+            if (state is! SuccessShopDataState) {
+              return Center(child: CircularProgressIndicator());
+            }
+            else{
+                return Center(child: CircularProgressIndicator());
+              }
+            },
+          condition: (ShopLayoutCubit.get(context).homeModel != null &&
+              ShopLayoutCubit.get(context).categoriesModel != null  )
         );
       },
     );
   }
 
   Widget homeProductsBuilder(
-          HomeModel model, CategoriesModel? catModel, context) =>
+          HomeModel? model, CategoriesModel? catModel, context) =>
       SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           CarouselSlider(
-            items: model.data!.banners!.map((e) {
+            items: model!.data?.banners!.map((e) {
               return Image(
                 image: NetworkImage('${e.image}'),
                 width: double.infinity,
-                fit: BoxFit.cover,
+                fit: BoxFit.fill,
               );
             }).toList(),
             options: CarouselOptions(
@@ -110,8 +134,13 @@ class ProductScreen extends StatelessWidget {
                 crossAxisCount: 2,
                 children: List.generate(
                     model.data!.products!.length,
-                    (index) => buildGridProduct(
-                        model.data!.products![index], context))),
+                    (index) => InkWell(
+                          child: buildGridProduct(
+                              model.data!.products![index], context),onTap: (){
+                            print( model.data!.products![index].id);
+                            navigateTo(context, ProductDetailsScreen(model: model.data!.products![index]));
+                    },
+                        ))),
           )
         ]),
       );
@@ -169,14 +198,12 @@ class ProductScreen extends StatelessWidget {
                   IconButton(
                       padding: EdgeInsets.zero,
                       onPressed: () {
-                        ShopLayoutCubit.get(context).changeFavorites(model.id);
+                        ShopLayoutCubit.get(context).changeFavorites(model.id!);
                         print(model.id);
-
                       },
                       icon: CircleAvatar(
                         radius: 15,
-                        //backgroundColor:ShopLayoutCubit.get(context).favorites[model.id] ?defaultColor:Colors.grey,
-
+                        backgroundColor: backGroundButtonColor(model, context),
                         child: Icon(
                           Icons.favorite_border,
                           size: 14,
@@ -212,3 +239,11 @@ Widget buildCategoryItem(DataModel dataModel) => Stack(
         )
       ],
     );
+
+Color backGroundButtonColor(ProductsModel model, context) {
+  if (ShopLayoutCubit.get(context).favorites[model.id] == true) {
+    return Colors.blueAccent;
+  } else {
+    return defaultColor;
+  }
+}

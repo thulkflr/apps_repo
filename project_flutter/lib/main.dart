@@ -8,6 +8,7 @@ import 'package:project_flutter/Layout/Shop_App/Login/login_screen.dart';
 import 'package:project_flutter/Layout/Shop_App/On_Boarding/on_boardig.dart';
 import 'package:project_flutter/Network/Remote/dio_helper.dart';
 
+import 'Component/const_component.dart';
 import 'Const/bloc_observe.dart';
 import 'Layout/News_App/Cubit/cubit.dart';
 
@@ -24,7 +25,7 @@ void main() async {
   Widget widget;
   bool? isDark = Prefs.getBooleanValue('isDark');
   bool? onBoarding = Prefs.getBooleanValue('onBoarding');
-  String? token = Prefs.getBooleanValue('token');
+  token = Prefs.getBooleanValue('token');
   print(token);
   if (onBoarding != null) {
     if (token != null) {
@@ -46,7 +47,9 @@ class MyApp extends StatelessWidget {
   final Widget startWidget;
 
   const MyApp(
-      {super.key, this.isDark, required this.startWidget}); //, required this.isDark
+      {super.key,
+      this.isDark,
+      required this.startWidget}); //, required this.isDark
 
   // This widget is the root of your application.
   @override
@@ -60,13 +63,16 @@ class MyApp extends StatelessWidget {
             ..getJaguar(),
         ),
         BlocProvider(
-          create: (BuildContext context) =>
-              CounterCubit()..changeAppTheme(change: isDark)),
+            create: (BuildContext context) =>
+                CounterCubit()..changeAppTheme(change: isDark)),
         BlocProvider(
-          create: (BuildContext context) =>
-              ShopLayoutCubit() ..getHomeData() ..getCategories(), //change: isDark
+          create: (BuildContext context) => ShopLayoutCubit()
+            ..getHomeData()
+            ..getCategories()
+            ..getFavorites()
+            ..getUsers()
+            ..getCartsData(), //change: isDark
         )
-
       ],
       child: BlocConsumer<CounterCubit, CounterStates>(
           listener: (context, state) {},
@@ -76,13 +82,13 @@ class MyApp extends StatelessWidget {
               debugShowMaterialGrid: false,
               title: 'Flutter Demo',
               theme: lightTheme,
-             // darkTheme: darkTheme,
-             //themeMode: ThemeMode.light,
+              // darkTheme: darkTheme,
+              //themeMode: ThemeMode.light,
               // themeMode:
               // CounterCubit.get(context).isDark
               //     ? ThemeMode.dark
               //     : ThemeMode.light,
-              home:startWidget,
+              home: startWidget,
             );
           }),
     );

@@ -1,25 +1,16 @@
+
+
 class HomeModel {
-  bool status=true ;
+  bool? status;
 
   HomeModelData? data;
 
-  HomeModel({required this.status,   this.data});
+  HomeModel({this.status, this.data});
 
   HomeModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
 
-    data =
-        (json['data'] != null ? HomeModelData.fromJson(json['data']) : null);
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['status'] = status;
-
-    if (this.data != null) {
-      data['data'] = this.data!.toJson();
-    }
-    return data;
+    data = (json['data'] != null ? HomeModelData.fromJson(json['data']) : null);
   }
 }
 
@@ -43,113 +34,125 @@ class HomeModelData {
       });
     }
   }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    if (banners != null) {
-      data['banners'] = banners!.map((v) => v.toJson()).toList();
-    }
-    if (products != null) {
-      data['products'] = products!.map((v) => v.toJson()).toList();
-    }
-
-    return data;
-  }
 }
 
 class BannersModel {
   int? id;
   String? image;
 
-  // Category? category;
-  // ProductsModel? product;
-
-  BannersModel({this.id, this.image});
 
   BannersModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     image = json['image'];
-    // category =
-    //     json['category'] != null ? Category.fromJson(json['category']) : null;
-    // product = json['product'];
-  }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id!;
-    data['image'] = image!;
-    // data['category'] = category?.toJson();
-    // data['product'] = product;
-    return data;
   }
 }
 
-// class Category {
-//   int? id;
-//   String? image;
-//   String? name;
-//
-//   Category({this.id, this.image, this.name});
-//
-//   Category.fromJson(Map<String, dynamic> json) {
-//     id = json['id'];
-//     image = json['image'];
-//     name = json['name'];
-//   }
-//
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = Map<String, dynamic>();
-//     data['id'] = id!;
-//     data['image'] = image!;
-//     data['name'] = name!;
-//     return data;
-//   }
-// }
-
 class ProductsModel {
-  int id=0;
+  ProductsModel();
+  CartData? data;
+  int? id ;
   double? price;
   double? oldPrice;
   int? discount;
   String? image;
   String? name;
+  ProductCartsModel? product;
+  String? description;
 
-  bool inFavorites=true;
-  bool inCart=true;
+  bool? inFavorites;
 
-  ProductsModel(
-      {required this.id,
-      this.price,
-      this.oldPrice,
-      this.discount,
-      this.image,
-      this.name,
-      required this.inFavorites,
-      required this.inCart});
+  bool? inCart;
 
   ProductsModel.fromJson(Map<String, dynamic> json) {
+    data = json['data'] != null ? CartData.fromJson(json['data']) : null;
+
     id = json['id'];
     price = json['price'];
     oldPrice = json['old_price'];
     discount = json['discount'];
     image = json['image'];
     name = json['name'];
-
+    product =
+    json['product'] != null ? ProductCartsModel.fromJson(json['product']) : null;
+    description = json['description'];
     inFavorites = json['in_favorites'];
     inCart = json['in_cart'];
   }
+}
+class ProductCartsModel {
+  int? id;
+  dynamic price;
+  dynamic oldPrice;
+  int? discount;
+  String? image;
+  String? name;
+  String? description;
+  Data? data;
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['price'] = price!;
-    data['old_price'] = oldPrice!;
-    data['discount'] = discount!;
-    data['image'] = image!;
-    data['name'] = name!;
-
-    data['in_favorites'] = inFavorites;
-    data['in_cart'] = inCart;
-    return data;
+  ProductCartsModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    price = json['price'];
+    oldPrice = json['old_price'];
+    discount = json['discount'];
+    image = json['image'];
+    name = json['name'];
+    description = json['description'];
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
+
+
+}
+
+class Data {
+  int? currentPage;
+  List<CartData>? data;
+  String? firstPageUrl;
+  int? from;
+  int? lastPage;
+  String? lastPageUrl;
+
+  String? path;
+  int? perPage;
+
+  int? to;
+  int? total;
+
+
+
+  Data.fromJson(Map<String, dynamic> json) {
+    currentPage = json['current_page'];
+    if (json['data'] != null) {
+      data = <CartData>[];
+      json['data'].forEach((v) {
+        data!.add(CartData.fromJson(v));
+      });
+    }
+    firstPageUrl = json['first_page_url'];
+    from = json['from'];
+    lastPage = json['last_page'];
+    lastPageUrl = json['last_page_url'];
+
+    path = json['path'];
+    perPage = json['per_page'];
+
+    to = json['to'];
+    total = json['total'];
+  }
+
+
+}
+
+class CartData {
+  int? id;
+  ProductCartsModel? product;
+  CartData();
+
+
+  CartData.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    product =
+    json['product'] != null ? ProductCartsModel.fromJson(json['product']) : null;
+  }
+
 }

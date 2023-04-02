@@ -22,8 +22,7 @@ class ShopLoginScreen extends StatelessWidget {
 
   final passwordController = TextEditingController();
 
-  String userEmail = '';
-  late ShopLoginModel loginModel;
+   late ShopLoginModel loginModel;
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +33,9 @@ class ShopLoginScreen extends StatelessWidget {
             if (state is SuccessLoginStates) {
               if (state.loginModel.status!) {
                 Prefs.saveData(
-                        key: 'token', value: state.loginModel.dataa?.token)
+                        key: 'token', value: state.loginModel.dataa!.token)
                     .then((value) {
+                      token =state.loginModel.dataa!.token!;// to update on token
                   navigateAndReplacment(context, ShopLayout());
                 });
               } else {
@@ -113,7 +113,7 @@ class ShopLoginScreen extends StatelessWidget {
                             ),
                             Container(
                               height: 40,
-                              width: 400,
+                              width: double.infinity,
                               decoration:
                                   BoxDecoration(shape: BoxShape.rectangle),
                               child: ConditionalBuilder(
@@ -147,7 +147,7 @@ class ShopLoginScreen extends StatelessWidget {
                                   Text(
                                     'Do not have an account? ',
 
-                                  ),TextButton(onPressed: (){navigateTo(context,ShopRegisterScreen() );}, child: Text('Sign Up',style: TextStyle(fontWeight: FontWeight.bold),))
+                                  ),TextButton(onPressed: (){navigateAndReplacment(context,ShopRegisterScreen() );}, child: Text('Sign Up',style: TextStyle(fontWeight: FontWeight.bold),))
                                 ],
                               ),
                             ),

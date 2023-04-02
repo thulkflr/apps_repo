@@ -23,7 +23,7 @@ Widget buildArticleItems(article,context) => InkWell(
             ));
       },
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding:  EdgeInsets.all(8.0),
         child: Row(
           children: [
             Container(
@@ -71,9 +71,9 @@ Widget buildArticleItems(article,context) => InkWell(
     );
 
 Widget mySeparator() => Padding(
-    padding: const EdgeInsets.all(8.0),
+    padding:   EdgeInsets.all(8.0),
     child: Container(
-      child: const Divider(
+      child:   Divider(
         height: 10,
         thickness: 1,
         indent: 5,
@@ -112,7 +112,7 @@ void showToast({required String msg, required ToastStates states,context}) =>
         Toast.lengthLong,
         Toast.bottom,
         chooseToastColor(states),
-        const TextStyle(color: Colors.white, fontSize: 16),
+          TextStyle(color: Colors.white, fontSize: 16),
         2,
         Border.symmetric(),
         false);
@@ -150,4 +150,4 @@ void signOut(context)
     }
   });
 }
-String token ='';//fromMain
+String? token ='';//fromMain

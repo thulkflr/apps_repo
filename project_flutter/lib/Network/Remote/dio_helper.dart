@@ -34,14 +34,28 @@ class DioHelper {
       required String token}) async {
     dio.options.headers = {
       'lang': lang,
-      'Authorization': token ?? '',
-      'Content-Type': 'application/json'
+      'Authorization': token,
+      'Content-Type': 'application/json',
     };
     return await dio.post(
       url,
       data: data,
     );
   }
-} //https://newsapi.org/
-// v2/everything?
-// q=tesla&apiKey=e056ffa0ad954ad6bb1cb6d21f31647e
+
+  static Future<Response> putData(
+      {required String url,
+      required Map<String, dynamic> data,
+      String lang = 'ar',
+      required String token}) async {
+    dio.options.headers = {
+      'lang': lang,
+      'Authorization': token,
+      'Content-Type': 'application/json',
+    };
+    return await dio.put(
+      url,
+      data: data,
+    );
+  }
+}
