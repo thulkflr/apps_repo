@@ -5,7 +5,12 @@ class HomeModel {
 
   HomeModelData? data;
 
-  HomeModel({this.status, this.data});
+  HomeModel({this.status, this.data}){
+    data = HomeModelData(
+      banners: [],
+      products: [],
+    );
+  }
 
   HomeModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];

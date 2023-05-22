@@ -20,6 +20,8 @@ class ShopLoginModel {
     data['data'] = dataa;
     return data;
   }
+
+
 }
 
 class UserData {

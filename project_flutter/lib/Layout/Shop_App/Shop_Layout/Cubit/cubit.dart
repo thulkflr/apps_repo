@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
@@ -14,6 +15,7 @@ import 'package:project_flutter/Models/Shop_App/change_Cart_model.dart';
 import 'package:project_flutter/Models/Shop_App/change_password.dart';
 import 'package:project_flutter/Models/Shop_App/home_model.dart';
 import 'package:project_flutter/Models/Shop_App/login_model.dart';
+import 'package:project_flutter/Models/response_data_model.dart';
 
 import 'package:project_flutter/Network/Remote/dio_helper.dart';
 import 'package:project_flutter/Network/end_point.dart';
@@ -41,7 +43,7 @@ class ShopLayoutCubit extends Cubit<ShopStates> {
     emit(ShopChangeBottomNavState());
   }
 
-  late HomeModel? homeModel = HomeModel();
+  HomeModel homeModel = HomeModel();
 
   Map<int, bool?> favorites = {};
   Map<int, bool?> carts = {};
@@ -52,7 +54,7 @@ class ShopLayoutCubit extends Cubit<ShopStates> {
         .then((value) {
       homeModel = HomeModel.fromJson(value.data);
 
-      homeModel!.data!.products!.forEach((element) {
+      homeModel.data!.products!.forEach((element) {
         favorites.addAll({
           element.id!: element.inFavorites,
         });
@@ -75,12 +77,15 @@ class ShopLayoutCubit extends Cubit<ShopStates> {
     });
   }
 
-  late CategoriesModel? categoriesModel = CategoriesModel();
+  CategoriesModel categoriesModel = CategoriesModel(data: []);
 
   void getCategories() {
     DioHelper.getData(url: GET_CATEGORIES, token: '', query: {'': 'null'})
         .then((value) {
-      categoriesModel = CategoriesModel.fromJson(value.data);
+      ResponseData<CategoriesModel> responseData =
+          ResponseData.fromJson(value.data);
+      categoriesModel =
+          CategoriesModel.fromJson(responseData.data as Map<String, dynamic>);
 
       emit(SuccessCategoriesDataState());
     }).catchError((onError) {
@@ -171,7 +176,7 @@ class ShopLayoutCubit extends Cubit<ShopStates> {
 
   void changeCart(int productID) {
     carts[productID] = !carts[productID]!;
-    emit(ChangeFavoritsDataState());
+    emit(ChangeCartDataState());
 
     DioHelper.postData(
             url: CARTS,
@@ -181,11 +186,10 @@ class ShopLayoutCubit extends Cubit<ShopStates> {
             token: token!)
         .then((value) {
       changeCartModel = ChangeCartModel.fromJson(value.data!);
-      //print(value.data);
       if (!changeCartModel.status) {
         carts[productID] = !carts[productID]!;
       } else {
-        getFavorites();
+        getCartsData();
       }
       emit(SuccessChangeCartDataState(changeCartModel));
     }).catchError((onError) {
@@ -211,7 +215,7 @@ class ShopLayoutCubit extends Cubit<ShopStates> {
     });
   }
 
-  late ChangePasswordModel passwordModel=ChangePasswordModel();
+  late ChangePasswordModel passwordModel = ChangePasswordModel();
 
   void changePassword({
     required String oldPassword,

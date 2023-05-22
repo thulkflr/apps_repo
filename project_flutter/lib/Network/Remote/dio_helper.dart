@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 
 class DioHelper {
@@ -21,10 +23,12 @@ class DioHelper {
       'Content-Type': 'application/json'
     };
 
-    return await dio.get(
+    var result = await dio.get(
       url,
-      queryParameters: query,
+      // queryParameters: query,
     );
+    log('result in dio : ${result.data}');
+    return result;
   }
 
   static Future<Response> postData(

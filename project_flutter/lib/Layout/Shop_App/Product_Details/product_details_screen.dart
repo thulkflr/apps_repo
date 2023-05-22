@@ -25,7 +25,7 @@ class ProductDetailsScreen extends StatelessWidget {
       create: (context) => ProductDetailsCubit()..getProductDetails(),
       child: BlocConsumer<ProductDetailsCubit, ProductDetailsStates>(
         listener: (context, state) {
-        return log( 'hi ID,${ model.data?.product!.id}');
+        return log( 'hi ID,${ model .id}');
 
         },
         builder: (context, state) => ConditionalBuilder(
@@ -128,7 +128,7 @@ Widget buildProductDetailsItem(ProductsModel dataModel, context) => Scaffold(
       ),
     ));
 
-Widget changeCartButton(  model, context) {
+Widget changeCartButton(   ProductsModel model, context) {
   if (ShopLayoutCubit.get(context).carts[model.id] == true) {
     return Text(
       'Added Successfully',

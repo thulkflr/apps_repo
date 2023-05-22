@@ -52,9 +52,9 @@ class CategoriesScreen extends StatelessWidget {
 
       },builder: (context, state) {
       return  ListView.separated(physics: BouncingScrollPhysics(),
-          itemBuilder: (context, index) => buildCatItem(ShopLayoutCubit.get(context).categoriesModel!.data!.data![index]),
+          itemBuilder: (context, index) => buildCatItem(ShopLayoutCubit.get(context).categoriesModel!.data![index]),
           separatorBuilder: (context, index) => mySeparator(),
-          itemCount: ShopLayoutCubit.get(context).categoriesModel!.data!.data!.length);
+          itemCount: ShopLayoutCubit.get(context).categoriesModel!.data!.length);
     },
     );
   }

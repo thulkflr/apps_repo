@@ -30,31 +30,38 @@ class ProductScreen extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        if(ShopLayoutCubit.get(context).categoriesModel!.data?.data!.length == 0)
-        {return Center(
-          child: Column(crossAxisAlignment: CrossAxisAlignment.center,mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.waving_hand,size: 70,color: Colors.grey.shade300),
-              Text('Home not Empty',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.grey.shade300),)
-            ],
-          ),
-        );}
+        if (ShopLayoutCubit.get(context).categoriesModel.data!.isEmpty) {
+          return Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.waving_hand, size: 70, color: Colors.grey.shade300),
+                Text(
+                  'Home not Empty',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey.shade300),
+                )
+              ],
+            ),
+          );
+        }
         return ConditionalBuilder(
-          builder: (context) {
-            return homeProductsBuilder(ShopLayoutCubit.get(context).homeModel,
-                ShopLayoutCubit.get(context).categoriesModel,  context);
-          },
-          fallback: (context) {
-            if (state is! SuccessShopDataState) {
-              return Center(child: CircularProgressIndicator());
-            }
-            else{
+            builder: (context) {
+              return homeProductsBuilder(ShopLayoutCubit.get(context).homeModel,
+                  ShopLayoutCubit.get(context).categoriesModel, context);
+            },
+            fallback: (context) {
+              if (state is! SuccessShopDataState) {
+                return Center(child: CircularProgressIndicator());
+              } else {
                 return Center(child: CircularProgressIndicator());
               }
             },
-          condition: (ShopLayoutCubit.get(context).homeModel != null &&
-              ShopLayoutCubit.get(context).categoriesModel != null  )
-        );
+            condition: (ShopLayoutCubit.get(context).homeModel != null &&
+                ShopLayoutCubit.get(context).categoriesModel != null));
       },
     );
   }
@@ -105,11 +112,11 @@ class ProductScreen extends StatelessWidget {
                       physics: BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) =>
-                          buildCategoryItem(catModel.data!.data![index]),
+                          buildCategoryItem(catModel.data![index]),
                       separatorBuilder: (context, index) => SizedBox(
                             width: 10,
                           ),
-                      itemCount: catModel!.data!.data!.length),
+                      itemCount: catModel!.data!.length),
                 ),
                 SizedBox(
                   height: 20,
@@ -136,10 +143,14 @@ class ProductScreen extends StatelessWidget {
                     model.data!.products!.length,
                     (index) => InkWell(
                           child: buildGridProduct(
-                              model.data!.products![index], context),onTap: (){
-                            print( model.data!.products![index].id);
-                            navigateTo(context, ProductDetailsScreen(model: model.data!.products![index]));
-                    },
+                              model.data!.products![index], context),
+                          onTap: () {
+                            print(model.data!.products![index].id);
+                            navigateTo(
+                                context,
+                                ProductDetailsScreen(
+                                    model: model.data!.products![index]));
+                          },
                         ))),
           )
         ]),
